@@ -1,5 +1,5 @@
-# Miningcore.WebUI
-<h4>Miningcore WebUI for the Coinfoundry Miningcore Pool</h4>
+# BTCPool Miningcore.WebUI
+<h4>Miningcore WebUI for the BTCPool Miningcore Pool</h4>
 
 Miningcore is one of the best open source minning pools there are.
 To make this pool look good, you have to have a nice and fast user interface.
@@ -36,7 +36,7 @@ var stratumAddress = "stratum+tcp://domain-name.com:";</br>
 
 
 <b>Live Miningcore.WebUI</b></br>
-My pool website can be found at https://miningcore.eu
+My pool website can be found at https://btcpool.co.uk
 
 
 <b>Suggestion</b></br>
