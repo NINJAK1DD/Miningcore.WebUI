@@ -30,7 +30,7 @@ if (WebURL.substring(WebURL.length-1) != "/")
 	WebURL = WebURL + "/";
 	console.log('Corrected WebURL, does not end with / -> New WebURL : ', WebURL);
 }
-var API            = WebURL + "api/";   						// API address is:  https://domain.com/api/
+var API            = "CHANGE ME TO POOL URL";   						// API address is:  https://domain.com/api/
 // API correction if not ends with /
 if (API.substring(API.length-1) != "/")
 {
@@ -166,11 +166,18 @@ function loadHomePage() {
       $.each(data.pools, function(index, value) {
 
         var coinLogo = "<img class='coinimg' src='img/coin/icon/" + value.coin.type.toLowerCase() + ".png' />";
-		var coinName = value.coin.name;
-		if (typeof coinName === "undefined" || coinName === null) {coinName = value.coin.type;}
+                var coinName = value.coin.name;
+                if (typeof coinName === "undefined" || coinName === null) {coinName = value.coin.type;}
 
-		poolCoinTableTemplate += "<tr class='coin-table-row' href='#" + value.id + "'>";
-		poolCoinTableTemplate += "<td class='coin'><a href='#" + value.id + "'<span>" + coinLogo + coinName + " (" + value.coin.type.toUpperCase() + ") </span></a></td>";
+                var coinType = value.coin.type.toUpperCase();
+
+                poolCoinTableTemplate += "<tr class='coin-table-row' href='#" + value.id + "'>";
+                // Added the following lines to append (- SOLO) to solo named pools
+                if (value.id === "btc1-solo" || value.id === "doge1-solo" || value.id === "ltc1-solo") {
+                poolCoinTableTemplate += "<td class='coin'><a href='#" + value.id + "'><span>" + coinLogo + coinName + " (" + coinType + ") - SOLO</span></a></td>";
+                } else {
+                poolCoinTableTemplate += "<td class='coin'><a href='#" + value.id + "'><span>" + coinLogo + coinName + " (" + coinType + ")</span></a></td>";
+                }
 		poolCoinTableTemplate += "<td class='algo'>" + value.coin.algorithm + "</td>";
 		poolCoinTableTemplate += "<td class='miners'>" + value.poolStats.connectedMiners + "</td>";
 		poolCoinTableTemplate += "<td class='pool-hash'>" + _formatter(value.poolStats.poolHashrate, 5, "H/s") + "</td>";
@@ -236,7 +243,10 @@ function loadStatsPage() {
 // Load DASHBOARD page content
 function loadDashboardPage() {
   function render() {
-    //clearInterval();
+    loadDashboardData($("#walletAddress").val());
+    loadDashboardWorkerList($("#walletAddress").val());
+    loadDashboardChart($("#walletAddress").val());
+
     setInterval(
       (function load() {
         loadDashboardData($("#walletAddress").val());
@@ -247,17 +257,22 @@ function loadDashboardPage() {
       60000
     );
   }
+
   var walletQueryString = window.location.hash.split(/[#/?]/)[3];
+
   if (walletQueryString) {
     var wallet = window.location.hash.split(/[#/?]/)[3].replace("address=", "");
     if (wallet) {
-      $(walletAddress).val(wallet);
+      $("#walletAddress").val(wallet);
       localStorage.setItem(currentPool + "-walletAddress", wallet);
       render();
+      return;
     }
   }
+
   if (localStorage[currentPool + "-walletAddress"]) {
     $("#walletAddress").val(localStorage[currentPool + "-walletAddress"]);
+    render();
   }
 }
 
@@ -387,76 +402,109 @@ function loadConnectPage() {
   return $.ajax(API + "pools")
     .done(function(data) {
       var connectPoolConfig = "";
+      var defaultPort = "";
+      var coinName = "";
+      var coinType = "";
+      var algorithm = "";
+      var minerPorts = "";
+
       $.each(data.pools, function(index, value) {
         if (currentPool === value.id) {
 
-			defaultPort = Object.keys(value.ports)[0];
-        	coinName = value.coin.name;
-			coinType = value.coin.type.toLowerCase();
-			algorithm = value.coin.algorithm;
+          defaultPort = Object.keys(value.ports)[0];
+          coinName = value.coin.name;
+          coinType = value.coin.type.toLowerCase();
+          algorithm = value.coin.algorithm;
+          minerPorts = "";
 
-			// Connect Pool config table
-			connectPoolConfig += "<tr><td>Crypto Coin name</td><td>" + coinName + " (" + value.coin.type + ") </td></tr>";
-			//connectPoolConfig += "<tr><td>Coin Family line </td><td>" + value.coin.family + "</td></tr>";
-			connectPoolConfig += "<tr><td>Coin Algorithm</td><td>" + value.coin.algorithm + "</td></tr>";
-			connectPoolConfig += '<tr><td>Pool Wallet</td><td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 12) + " &hellip; " + value.address.substring(value.address.length - 12) + "</a></td></tr>";
-			connectPoolConfig += "<tr><td>Payout Scheme</td><td>" + value.paymentProcessing.payoutScheme + "</td></tr>";
-			connectPoolConfig += "<tr><td>Minimum Payment</td><td>" + value.paymentProcessing.minimumPayment + " " + value.coin.type + "</td></tr>";
-			if (typeof value.paymentProcessing.minimumPaymentToPaymentId !== "undefined") {
-				connectPoolConfig += "<tr><td>Minimum Payout (to Exchange)</td><td>" + value.paymentProcessing.minimumPaymentToPaymentId + "</td></tr>";
-			}
-			connectPoolConfig += "<tr><td>Pool Fee</td><td>" + value.poolFeePercent + "%</td></tr>";
-			$.each(value.ports, function(port, options) {
-				if (options.tls === true) {
-					connectPoolConfig += "<tr><td>stratum+ssl://";
-				} else {
-					connectPoolConfig += "<tr><td>stratum+tcp://";
-				}
-				connectPoolConfig += stratumAddress + ":" + port + "</td><td>";
-				if (typeof options.varDiff !== "undefined" && options.varDiff != null) {
-					connectPoolConfig += "Difficulty Variable / " + options.varDiff.minDiff + " &harr; ";
-					if (typeof options.varDiff.maxDiff === "undefined" || options.varDiff.maxDiff == null) {
-						connectPoolConfig += "&infin; ";
-					} else {
-						connectPoolConfig += options.varDiff.maxDiff;
-					}
-				} else {
-					connectPoolConfig += "Difficulty Static / " + options.difficulty ;
-				}
-				connectPoolConfig += "</td></tr>";
-			});
+          // Connect Pool config table
+          connectPoolConfig += "<tr><td>Crypto Coin name</td><td>" + coinName + " (" + value.coin.type + ") </td></tr>";
+          connectPoolConfig += "<tr><td>Coin Algorithm</td><td>" + value.coin.algorithm + "</td></tr>";
+          connectPoolConfig += '<tr><td>Pool Wallet</td><td><a href="' + value.addressInfoLink + '" target="_blank">' + value.address.substring(0, 12) + " &hellip; " + value.address.substring(value.address.length - 12) + "</a></td></tr>";
+          connectPoolConfig += "<tr><td>Payout Scheme</td><td>" + value.paymentProcessing.payoutScheme + "</td></tr>";
+          connectPoolConfig += "<tr><td>Minimum Payment</td><td>" + value.paymentProcessing.minimumPayment + " " + value.coin.type + "</td></tr>";
 
+          if (typeof value.paymentProcessing.minimumPaymentToPaymentId !== "undefined") {
+            connectPoolConfig += "<tr><td>Minimum Payout (to Exchange)</td><td>" + value.paymentProcessing.minimumPaymentToPaymentId + "</td></tr>";
+          }
+
+          connectPoolConfig += "<tr><td>Pool Fee</td><td>" + value.poolFeePercent + "%</td></tr>";
+
+          $.each(value.ports, function(port, options) {
+            if (options.tls === true) {
+              connectPoolConfig += "<tr><td>stratum+ssl://";
+            } else {
+              connectPoolConfig += "<tr><td>stratum+tcp://";
+            }
+
+            connectPoolConfig += stratumAddress + ":" + port + "</td><td>";
+
+            if (typeof options.varDiff !== "undefined" && options.varDiff != null) {
+              connectPoolConfig += "Difficulty Variable / " + options.varDiff.minDiff + " &harr; ";
+              if (typeof options.varDiff.maxDiff === "undefined" || options.varDiff.maxDiff == null) {
+                connectPoolConfig += "&infin; ";
+              } else {
+                connectPoolConfig += options.varDiff.maxDiff;
+              }
+            } else {
+              connectPoolConfig += "Difficulty Static / " + options.difficulty;
+            }
+
+            connectPoolConfig += "</td></tr>";
+
+            // Build the Miner Configuration port list dynamically from the same port data
+            minerPorts += "<li><strong>Stratum Port " + port + "</strong>: ";
+
+            if (typeof options.name !== "undefined" && options.name) {
+              minerPorts += options.name;
+            } else {
+              minerPorts += "Mining";
+            }
+
+            if (typeof options.varDiff !== "undefined" && options.varDiff != null) {
+              minerPorts += " (Difficulty Variable / " + options.varDiff.minDiff + " &harr; ";
+              if (typeof options.varDiff.maxDiff === "undefined" || options.varDiff.maxDiff == null) {
+                minerPorts += "&infin;";
+              } else {
+                minerPorts += options.varDiff.maxDiff;
+              }
+              minerPorts += ")";
+            } else {
+              minerPorts += " (Difficulty Static / " + options.difficulty + ")";
+            }
+
+            minerPorts += "</li>";
+          });
         }
       });
-      connectPoolConfig += "</tbody>";
+
       $("#connectPoolConfig").html(connectPoolConfig);
 
+      // Connect Miner config
+      $("#miner-config").html("");
+      $("#miner-config").load("poolconfig/" + coinType + ".html", function(response, status, xhr) {
+        if (status == "error") {
+          $("#miner-config").load("poolconfig/default.html", function(responseText) {
+            var config = $("#miner-config")
+              .html()
+              .replace(/{{ stratumAddress }}/g, coinType + "." + stratumAddress + ":" + defaultPort)
+              .replace(/{{ coinName }}/g, coinName)
+              .replace(/{{ aglorithm }}/g, algorithm)
+              .replace(/{{ minerPorts }}/g, minerPorts);
 
-	  // Connect Miner config
-	  $("#miner-config").html("");
-      $("#miner-config").load("poolconfig/" + coinType + ".html",
-        function( response, status, xhr ) {
-          if ( status == "error" ) {
-			$("#miner-config").load("poolconfig/default.html",
-			  function(responseText){
-				var config = $("#miner-config")
-                .html()
-				.replace(/{{ stratumAddress }}/g, coinType + "." + stratumAddress + ":" + defaultPort)
-				.replace(/{{ coinName }}/g, coinName)
-				.replace(/{{ aglorithm }}/g, algorithm);
-				$(this).html(config);
-			  }
-			);
-		  } else {
-			var config = $("#miner-config")
+            $(this).html(config);
+          });
+        } else {
+          var config = $("#miner-config")
             .html()
             .replace(/{{ stratumAddress }}/g, coinType + "." + stratumAddress + ":" + defaultPort)
-			.replace(/{{ coinName }}/g, coinName)
-			.replace(/{{ aglorithm }}/g, algorithm);
-            $(this).html(config);
-		  }
+            .replace(/{{ coinName }}/g, coinName)
+            .replace(/{{ aglorithm }}/g, algorithm)
+            .replace(/{{ minerPorts }}/g, minerPorts);
+
+          $(this).html(config);
         }
-      );
+      });
     })
     .fail(function() {
       $.notify(
@@ -683,17 +731,23 @@ function loadDashboardData(walletAddress) {
   return $.ajax(API + "pools/" + currentPool + "/miners/" + walletAddress)
     .done(function(data) {
       $("#pendingShares").text(_formatter(data.pendingShares, 0, ""));
+
       var workerHashRate = 0;
       if (data.performance) {
         $.each(data.performance.workers, function(index, value) {
           workerHashRate += value.hashrate;
         });
       }
+
       $("#minerHashRate").text(_formatter(workerHashRate, 5, "H/s"));
       $("#pendingBalance").text(_formatter(data.pendingBalance, 5, ""));
       $("#paidBalance").text(_formatter(data.todayPaid, 5, ""));
-      $("#lifetimeBalance").text(_formatter(data.pendingBalance + data.totalPaid, 5, "")
+      $("#lifetimeBalance").text(
+        _formatter(data.pendingBalance + data.totalPaid, 5, "")
       );
+      // Added worker data
+      $("#bestSessionShare").text(_formatter(data.bestSessionShare || 0, 5, ""));
+      $("#bestShare").text(_formatter(data.bestShare || 0, 5, ""));
     })
     .fail(function() {
       $.notify(
@@ -714,25 +768,31 @@ function loadDashboardWorkerList(walletAddress) {
   return $.ajax(API + "pools/" + currentPool + "/miners/" + walletAddress)
     .done(function(data) {
       var workerList = "";
-      if (data.performance) {
-        var workerCount = 0;
+      var workerCount = 0;
+
+      if (data.performance && data.performance.workers) {
         $.each(data.performance.workers, function(index, value) {
           workerCount++;
           workerList += "<tr>";
           workerList += "<td>" + workerCount + "</td>";
+
           if (index.length === 0) {
             workerList += "<td>Unnamed</td>";
           } else {
             workerList += "<td>" + index + "</td>";
           }
+
           workerList += "<td>" + _formatter(value.hashrate, 5, "H/s") + "</td>";
-          workerList +=
-            "<td>" + _formatter(value.sharesPerSecond, 5, "S/s") + "</td>";
+          workerList += "<td>" + _formatter(value.sharesPerSecond, 5, "S/s") + "</td>";
+          //Added worker data
+          workerList += "<td>" + _formatter(value.bestSessionShare || 0, 5, "") + "</td>";
+          workerList += "<td>" + _formatter(value.bestShare || 0, 5, "") + "</td>";
           workerList += "</tr>";
         });
       } else {
-        workerList += '<tr><td colspan="4">None</td></tr>';
+        workerList += '<tr><td colspan="6">None</td></tr>';
       }
+
       $("#workerCount").text(workerCount);
       $("#workerList").html(workerList);
     })

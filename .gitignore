@@ -1,0 +1,18 @@
+# Local backup and working files
+*.backup*
+*.working
+*.bak
+*.old
+*.orig
+*.save
+*.swp
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store

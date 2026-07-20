@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height: auto; min-height: 100%;"><head>
+<html style="height: auto; min-height: 100%;"><head> 
 
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <meta name="msapplication-TileImage" content="img/pool-icon.png">
 
-  <title>Miningcore.WebUI</title>
+  <title>BTCPool Solo Mining Pool WebUI</title>
 
   <link rel="apple-touch-icon" href="img/pool-icon.png">
   <link rel="apple-touch-icon" sizes="76x76" href="img/pool-icon.png">
@@ -15,7 +15,7 @@
   <!--
     AdminLTE & Skins. We have chosen the skin-purple for this website page.
     However, you can choose any other skin from the css/skins/ folder.
-	Make sure you apply the skin class to the body tag so the changes take effect.
+        Make sure you apply the skin class to the body tag so the changes take effect.
   -->
 
 
@@ -41,6 +41,35 @@
   <script src="js/chartist.min.js"></script>
   <script src="js/miningcore.js"></script>
 
+  <style>
+    /* Dashboard stat tiles: allow longer labels like "Best Session Share" */
+    .dashboard-stat-row .info-box {
+        min-height: 105px;
+    }
+
+    .dashboard-stat-row .info-box .info-box-icon {
+        height: 105px;
+        line-height: 105px;
+    }
+
+    .dashboard-stat-row .info-box .info-box-content {
+        white-space: normal;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .dashboard-stat-row .info-box .info-box-text {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        line-height: 1.2;
+        font-size: 13px;
+    }
+
+    .dashboard-stat-row .info-box .info-box-number {
+        white-space: normal;
+    }
+  </style>
 
 </head>
 
@@ -162,7 +191,7 @@ Apply one or more of the following classes to get the desired effect
 
       <nav class="navbar" >
         <a>  </a>
-        <span class="header-text"><b>Miningcore</b> - making mining easy</span>
+        <span class="header-text"><b>BTCPool</b> - making mining SOLO easy</span>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
@@ -179,13 +208,13 @@ Apply one or more of the following classes to get the desired effect
 <!-- INDEX HOME PAGE -->
 	<div class="page page-index">
 		<section class="content-header">
-			<h1>MININGCORE<small>coins to mine</small></h1>
+			<h1>BTCPOOL<small>coins to mine</small></h1>
 		</section>
 		<div class="content container-fluid " >
 
 			<div class="col-12">
 				<div class="card card-shadow card-body">
-					<center><h5> Welcome to Miningcore Mining Pool</h5></center>
+					<center><h5> Welcome to the SOLO Mining Pool</h5></center>
 					<hr>
 					<p>Low fee, high performance and a nice design. </br> Pick a coin, connect you miner and make some coins.</p>
 					</br>
@@ -222,7 +251,7 @@ Apply one or more of the following classes to get the desired effect
 
 <!-- INDEX FOOTER -->
     <footer class="main-index-footer">
-      <strong><a target="_blank" href="https://github.com/minernl/Miningcore.WebUI">&copy; <script>document.write(new Date().getFullYear())</script> made by COINStoMINE.eu</a> - Version 1.02</strong>
+      <strong><a target="_blank" href="https://github.com/minernl/Miningcore.WebUI">&copy; <script>document.write(new Date().getFullYear())</script> made by COINStoMINE.eu, modified by BTCPool.co.uk</a></strong>
     </footer>
 
   </div>
@@ -248,7 +277,7 @@ Apply one or more of the following classes to get the desired effect
       <nav class="navbar navbar-static-top" role="navigation">
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"><i class="fas fa-bars"></i></a>
 
-        <span class="header-text"><b>Miningcore</b> - making mining easy</span>
+        <span class="header-text"><b>BTCPool</b> - making mining SOLO easy</span>
 
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
@@ -428,47 +457,69 @@ Apply one or more of the following classes to get the desired effect
 
 		  </div>
 
-		  <div class="row">
+		  <div class="row dashboard-stat-row">
 
-			<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-aqua"><i class="fas fa-receipt"></i></span>
-					<div class="info-box-content">
-						<span class="info-box-text">Pending Shares</span>
-						<span class="info-box-number"><div id="pendingShares"></div></span>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-red"><i class="fas fa-hand-holding-usd"></i></span>
-					<div class="info-box-content">
-						<span class="info-box-text">Pending Balance</span>
-						<span class="info-box-number"><div id="pendingBalance"></div></span>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-green"><i class="far fa-money-bill-alt"></i></span>
-					<div class="info-box-content">
-						<span class="info-box-text">Paid Balance Today</span>
-						<span class="info-box-number"><div id="paidBalance"></div></span>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-yellow"><i class="fas fa-piggy-bank"></i></span>
-					<div class="info-box-content">
-						<span class="info-box-text">Lifetime Balance</span>
-						<span class="info-box-number"><div id="lifetimeBalance"></div></span>
-					</div>
-				</div>
-			</div>
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                        <span class="info-box-icon bg-aqua"><i class="fas fa-receipt"></i></span>
+                                        <div class="info-box-content">
+                                                <span class="info-box-text">Pending Shares</span>
+                                                <span class="info-box-number"><div id="pendingShares"></div></span>
+                                        </div>
+                                </div>
+                        </div>
 
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                        <span class="info-box-icon bg-red"><i class="fas fa-hand-holding-usd"></i></span>
+                                        <div class="info-box-content">
+                                                <span class="info-box-text">Pending Balance</span>
+                                                <span class="info-box-number"><div id="pendingBalance"></div></span>
+                                        </div>
+                                </div>
+                        </div>
 
-		  </div><!-- /.row -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                        <span class="info-box-icon bg-green"><i class="far fa-money-bill-alt"></i></span>
+                                        <div class="info-box-content">
+                                                <span class="info-box-text">Paid Balance Today</span>
+                                                <span class="info-box-number"><div id="paidBalance"></div></span>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                        <span class="info-box-icon bg-yellow"><i class="fas fa-piggy-bank"></i></span>
+                                        <div class="info-box-content">
+                                                <span class="info-box-text">Lifetime Balance</span>
+                                                <span class="info-box-number"><div id="lifetimeBalance"></div></span>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                        <span class="info-box-icon bg-maroon"><i class="fas fa-bolt"></i></span>
+                                        <div class="info-box-content">
+                                                <span class="info-box-text">Best Session Share</span>
+                                                <span class="info-box-number"><div id="bestSessionShare"></div></span>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box">
+                                        <span class="info-box-icon bg-purple"><i class="fas fa-trophy"></i></span>
+                                        <div class="info-box-content">
+                                                <span class="info-box-text">Best Share</span>
+                                                <span class="info-box-number"><div id="bestShare"></div></span>
+                                        </div>
+                                </div>
+                        </div>
+
+                  </div><!-- /.row -->
 
 		  <div class="row equal h-100">
 
@@ -510,6 +561,8 @@ Apply one or more of the following classes to get the desired effect
                         <th>Name</th>
                         <th>Hashrate</th>
                         <th>Share Rate</th>
+                        <th>Best Session Share</th>
+                        <th>Best Share</th>
                         </tr>
 
 					  </thead>
@@ -693,148 +746,119 @@ Apply one or more of the following classes to get the desired effect
                 <div class="col-lg-12 col-sm-12">
                   <div class="card">
                     <div class="card-header bg-black-gradient">
-						<h4 class="card-title"><i class="fas fa-comment-dots"></i> FAQ</h4>
-						<p class="card-category">
-							How does the pool work?
-						</p>
-					</div>
+                      <h4 class="card-title"><i class="fas fa-comment-dots"></i> FAQ</h4>
+                      <p class="card-category">
+                        How does the pool work?
+                      </p>
+                    </div>
                     <div class="card-body table-responsive faq">
                       <h4>Do I need to register an account to mine?</h4>
                       <p>
-                        Registration is not required. Just configure your miner
-                        according to our instructions and start mining. Your
-                        first submitted share will automatically register you
-                        with our pool. Good Luck!
+                        No. Registration is not required. To start mining, simply configure your miner using
+                        the connection details provided on the pool and enter your credentials in the format below:
                       </p>
-                      <h4>
-                        Why is my reported hashrate zero or different from what
-                        my miner reports?
-                      </h4>
                       <p>
-                        Pool and miner hashrates are re-calculated every ten
-                        minutes. Therefore it can take a maximum of ten minutes
-                        for your hashrate to update depending on the submission
-                        time of your first valid share. The hashrate we display
-                        at the pool is a rough approximation of your hashrate
-                        based on your submitted shares and can therefore differ
-                        significantly from the hashrate displayed locally. When
-                        in doubt always consider the value displayed by your
-                        miner as the correct one.
+                        <strong>Username:</strong> <code>&lt;your wallet address&gt;.&lt;worker name&gt;</code><br>
+                        <strong>Password:</strong> <code>x</code>
                       </p>
+                      <p>
+                        Your wallet address is used to identify your account and to receive any eligible payouts.
+                        The worker name is optional, but it helps you distinguish between individual miners or rigs.
+                      </p>
+
+                      <h4>How does the pool work?</h4>
+                      <p>
+                        This is a <strong>solo mining pool</strong>. That means you are mining for
+                        your own block reward rather than sharing rewards with other miners through a
+                        proportional payment system such as PPLNS or PPS.
+                      </p>
+                      <p>
+                        The pool provides your miner with valid work and submits completed shares and
+                        valid block candidates to the network. If <strong>your miner</strong> finds a
+                        valid block, the reward for that block is credited to you, subject to the
+                        pool fee and the coin’s normal maturity and confirmation rules.
+                      </p>
+                      <p>
+                        Other miners connected to the pool do not reduce your block reward, and your
+                        shares do not earn partial payouts. On a solo pool, shares are mainly used to
+                        confirm that your miner is working correctly and to estimate hashrate.
+                      </p>
+
+                      <h4>Why is my reported hashrate zero or different from what my miner reports?</h4>
+                      <p>
+                        Pool and miner hashrates are not measured in exactly the same way. The pool’s
+                        displayed hashrate is an estimate based on the valid shares your miner submits
+                        over a period of time, while your miner shows its own local real-time estimate.
+                      </p>
+                      <p>
+                        Because of this, it can take several minutes for your hashrate to appear or
+                        update on the pool, especially after first connecting. It is also normal for
+                        the pool-side value to fluctuate. When in doubt, your miner’s local hashrate
+                        is usually the best indication of current performance.
+                      </p>
+
                       <h4>How will I get paid?</h4>
                       <p>
-                        All of our pools utilize the PPLNS payment system. PPLNS
-                        is short for "Pay Per Last N Shares". The image below
-                        illustrates the system. One round has an arbitrary
-                        number of shares which is solely based on sheer luck.
-                        Proportional reward systems only consider shares of one
-                        round when calculating rewards. PPLNS however, uses a
-                        quite constant number N of shares for calculating
-                        rewards. This number N changes only with the difficulty:
+                        This is a solo mining pool. If your miner finds a valid block, you receive the full block reward
+                        and all transaction fees included in that block, minus the pool fee.
                       </p>
-                      <img alt="PPLNS" src="img/shares_round.png" style="width:100%;max-width: 500px;">
-                      <p>&nbsp;</p>
+                      <p>
+                        The pool fee is <strong>1%</strong>, so the successful miner receives:
+                      </p>
+                      <p>
+                        <strong>Block reward + transaction fees - 1% pool fee</strong>
+                      </p>
+                      <p>
+                        Unlike a shared-reward pool, block rewards in a solo pool are not distributed across all miners.
+                        The payout goes only to the miner who solved the block.
+                      </p>
 
-                      <p>
-                        As you know the number of shares needed to solve a block
-                        within a round is different. Round one and three needed
-                        (difficulty * 2) shares to be solved. Round two and four
-                        are quite short rounds. There were less than (difficulty
-                        * 2) shares necessary to solve them. Round five however
-                        is a very long round which means the pool needed more
-                        than (difficulty * 2) shares to solve the block. From
-                        this follows that:
-                      </p>
-                      <ul>
-                        <li>
-                          Rounds one and three are like proportional rounds. All
-                          of your shares from the given round are considered for
-                          reward calculations
-                        </li>
-                        <li>
-                          For rounds two and four, shares from the previous
-                          rounds are considered for calculations as well (marked
-                          green). In other words: regardless of round boundaries
-                          we always consider the last
-                          <em>(difficulty * 2)</em> shares. Your portion of the
-                          amount of shares is used to calculate your reward.
-                        </li>
-                        <li>
-                          Round five however is very long. In this round your
-                          lowermost shares (within the marked red part) are
-                          silently dropped if they are not within the last
-                          <em>(difficulty * 2)</em> shares.
-                        </li>
-                      </ul>
-                      <p>
-                        <strong>PPLNS favors constant and/or occasional loyal pool
-                          members over pool hoppers.
-                        </strong>
-                        Pool hoppers are betting for a "quick win" (like round
-                        two above) with low shares per round. If the round
-                        exceeds a certain amount of shares they "hop" to another
-                        proportional pool which started a new round more
-                        recently. This assures better rewards for pool hoppers
-                        over occasional or constant miners which are loyal to
-                        their pool. Pool hopping however implies that pool
-                        hoppers need to know when a round is started and how
-                        much shares are considered for reward. This is very easy
-                        with proportional reward system. While using PPLNS, this
-                        is no longer true. On long rounds (like round five
-                        above) the pool hoppers shares won’t be considered for
-                        reward calculations in favor of loyal miners. This is
-                        due to the fact that pool hoppers only mine on the
-                        beginning of rounds. On short and normal rounds pool
-                        hoppers won’t lose their shares. Due to the fact that
-                        shares from previous rounds from loyal miners are
-                        considered twice (or even more often on extremely short
-                        rounds) the pool hopper won’t get the same reward as
-                        from proportional reward system.
-                      </p>
-                      <p>
-                        Assuming blocks have been found, payouts are processed
-                        and send every 10 minutes. This process is fully automated.
-                      </p>
                       <h4>When will I get paid?</h4>
                       <p>
-                        You won't see any balance in your account until a block
-                        has been found by the pool and after the block has
-                        reached a mature status. This may take a couple hours,
-                        depending on the coin. As soon as a block can be
-                        considered 'mature' by the pool, your shares will be
-                        used to calculate your contribution towards finding the
-                        block. The more you've contributed, the higher your cut
-                        of the block reward will be. Your cut of the block
-                        reward will then be credited to your pending balance. If
-                        your balance reaches or exceeds the pool's minimum
-                        payout amount, the pool will transfer your
-                        <b>entire</b> balance to your wallet and
-                        <b>reset</b> your pending balance to zero. The minimum
-                        payout for each pool is listed in its 'Pool Stats' area.
+                        Payment is not immediate when a block is found. First, the block must be
+                        accepted by the network and then reach mature status according to the rules
+                        of the coin you are mining. This confirmation period varies by coin.
                       </p>
                       <p>
-                        We are a small pool for the time being, and as such it
-                        may take some time to find a block. On larger pools you
-                        would see some balance earlier because they will find
-                        blocks faster, but you will get a smaller share of the
-                        reward than what you would in a smaller pool. Over time
-                        you will earn more or less the same amount when mining
-                        on a large pool or on a small one.
+                        After the block reward has matured, it is credited to your pool balance. If
+                        your balance meets the minimum payout threshold, the pool will send the full
+                        eligible balance to your wallet automatically.
+                      </p>
+
+                      <h4>Why can solo mining take a long time to find a block?</h4>
+                      <p>
+                        Solo mining is heavily influenced by luck and variance. Even if your miner is
+                        running correctly, there is no guaranteed timeframe for finding a block. You
+                        may find one sooner than expected, later than expected, or not at all during
+                        a given period.
                       </p>
                       <p>
-                        In other words, the rewards you get on average are
-                        exactly proportional to your part in the total work done
-                        by the pool. If you mine in a pool
-                        <strong>twice as large</strong>, the pool will collect
-                        twice as much rewards but your share in them will be
-                        <strong>cut by half</strong>, meaning you get the same
-                        on average.
+                        Your chances improve with more hashrate and more uptime, but solo mining
+                        should always be approached with the understanding that rewards are
+                        unpredictable and can be infrequent.
+                      </p>
+
+                      <h4>Do submitted shares earn me anything?</h4>
+                      <p>
+                        No. Submitted shares do not earn proportional rewards on a solo pool. They
+                        are used to verify that your miner is connected, submitting valid work, and
+                        contributing hashrate.
                       </p>
                       <p>
-                        Trustworthiness, reliability, support and low latency
-                        are the things you should consider when choosing a pool.
-                        By avoiding the largest pools you contribute to the
-                        network health by spreading the hash power.
+                        Shares are useful for pool statistics and miner monitoring, but only a valid
+                        block found by your miner results in a block reward.
+                      </p>
+
+                      <h4>What should I consider before solo mining?</h4>
+                      <p>
+                        Solo mining is best suited to miners who understand variance and are
+                        comfortable with irregular results. A successful block finder keeps the full
+                        block reward, subject to pool fee and network rules, but rewards are much
+                        less predictable than on shared-reward pools.
+                      </p>
+                      <p>
+                        Trustworthiness, reliability, support, uptime, and low latency are all
+                        important when choosing a solo pool.
                       </p>
                     </div>
                   </div>
@@ -867,7 +891,7 @@ Apply one or more of the following classes to get the desired effect
   </div>
 
   <footer class="main-footer">
-	<strong><a target="_blank" href="https://github.com/minernl/Miningcore.WebUI">&copy; <script>document.write(new Date().getFullYear())</script> made by COINStoMINE.eu</a></strong>
+	<strong><a target="_blank" href="https://github.com/minernl/Miningcore.WebUI">&copy; <script>document.write(new Date().getFullYear())</script> made by COINStoMINE.eu, modified by BTCPool.co.uk</a></strong>
   </footer>
 
   </div> <!-- end main-pool -->

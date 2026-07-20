@@ -63,3 +63,13 @@ Version 1.0  (1 jul 2019)
 - one modern colorfull look 
 
 
+## Upstream project and attribution
+
+This project is based on Miningcore.WebUI by btclinux.
+
+Upstream repository:
+https://github.com/btclinux/Miningcore.WebUI
+
+The original Git commit history has been retained so that the work and
+authorship of the original contributors remain recorded. This repository
+contains additional customisations maintained by NINJAK1DD.
