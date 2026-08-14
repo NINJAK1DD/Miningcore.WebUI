@@ -730,7 +730,9 @@ function loadStatsChart() {
 function loadDashboardData(walletAddress) {
   return $.ajax(API + "pools/" + currentPool + "/miners/" + walletAddress)
     .done(function(data) {
-      $("#pendingShares").text(_formatter(data.pendingShares, 0, ""));
+      $("#pendingShares").text(
+        _formatter(data.pendingShares, data.pendingShares >= 1e12 ? 2 : 0, "")
+      );
 
       var workerHashRate = 0;
       if (data.performance) {
