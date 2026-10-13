@@ -319,9 +319,12 @@ function loadBlocksPage() {
       if (data.length > 0) {
         $.each(data, function(index, value) {
 		  var createDate = convertLocalDateToUTCDate(new Date(value.created),false);
-          var effort = Math.round(value.effort * 100);
+          var effort = value.effort * 100;
+          var effortText = _formatEffort(value.effort);
           var effortClass = "";
-          if (effort < 30) {
+          if (effortText === "n/a") {
+            effortClass = "";
+          } else if (effort < 30) {
             effortClass = "effort1";
           } else if (effort < 80) {
             effortClass = "effort2";
@@ -334,8 +337,8 @@ function loadBlocksPage() {
           blockList += "<tr>";
           blockList += "<td>" + createDate + "</td>";
           blockList += "<td><a href='" + value.infoLink + "' target='_blank'>" + value.blockHeight + "</a></td>";
-          if (typeof value.effort !== "undefined") {
-            blockList += "<td class='" + effortClass + "'>" + effort + "%</td>";
+          if (effortText !== "n/a") {
+            blockList += "<td class='" + effortClass + "'>" + effortText.replace(/</g, "&lt;") + "</td>";
           } else {
             blockList += "<td>n/a</td>";
           }
@@ -532,6 +535,29 @@ function loadWallet() {
 }
 
 
+// Miningcore effort is a ratio: 1 means 100%, not a guaranteed block.
+function _formatEffort(value) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+    return "n/a";
+  }
+  if (value === 0) {
+    return "0%";
+  }
+
+  var percentage = value * 100;
+  if (!Number.isFinite(percentage)) {
+    return "n/a";
+  }
+  // Compare in ratio units so multiplying the exact boundary by 100 cannot
+  // round it just below 0.0001% in floating-point arithmetic.
+  if (value < 0.000001) {
+    return "<0.0001%";
+  }
+
+  return percentage.toFixed(4).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + "%";
+}
+
+
 // General formatter function
 function _formatter(value, decimal, unit) {
   if (value === 0) {
@@ -619,7 +645,7 @@ function loadStatsData() {
 		  $("#minimumPayment").text(value.paymentProcessing.minimumPayment + " " + value.coin.type);
 		  $("#payoutScheme").text(value.paymentProcessing.payoutScheme);
 		  $("#poolFeePercent").text(value.poolFeePercent + " %");
-		  $("#poolEffort").text(Math.round(value.poolEffort * 100)  + " %");
+		  $("#poolEffort").text(_formatEffort(value.poolEffort));
 
           $("#poolHashRate").text(_formatter(value.poolStats.poolHashrate, 5, "H/s"));
 		  $("#poolMiners").text(value.poolStats.connectedMiners + " Miner(s)");

@@ -73,3 +73,13 @@ https://github.com/btclinux/Miningcore.WebUI
 The original Git commit history has been retained so that the work and
 authorship of the original contributors remain recorded. This repository
 contains additional customisations maintained by NINJAK1DD.
+
+## Development checks
+
+With Node.js 20 or later, run the effort display regression checks without
+installing dependencies:
+
+```sh
+node --check js/miningcore.js
+node --test tests/effort-formatting.test.cjs
+```
